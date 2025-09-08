@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+mcp
+asyncpg
+httpx
+pydantic
+cryptography
+PyJWT
+python-dotenv
+sqlalchemy
+psycopg2-binary

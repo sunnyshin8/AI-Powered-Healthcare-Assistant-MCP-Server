@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare AI Assistant MCP Server</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&                         <a href="/docs#/Appointment/schedule_appointment_endpoint_appointment_schedule_post" class="btn">View API</a>
+                <a href="/dashboard" class="btn" style="background: linear-gradient(135deg, #667eea, #764ba2); margin-left: 10px;">Dashboard</a>     <a href="/docs#/Patient/get_patient_data_endpoint_patient__patient_id__get" class="btn">View API</a>
+                <a href="/dashboard" class="btn" style="background: linear-gradient(135deg, #667eea, #764ba2); margin-left: 10px;">Dashboard</a>splay=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        .particle:nth-child(odd) {
+            animation-delay: -2s;
+        }
+
+        .particle:nth-child(even) {
+            animation-delay: -4s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .logo {
+            display: inline-block;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        .logo i {
+            font-size: 4rem;
+            color: #fff;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+
+        .status-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #00ff88;
+            margin-right: 10px;
+            animation: blink 2s infinite;
+        }
+
+        .status-text {
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            color: #fff;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .card-title {
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .card-description {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #00ff88, #00cc70);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .endpoints {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .endpoints h2 {
+            color: #fff;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .endpoint-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .endpoint {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .endpoint:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(10px);
+        }
+
+        .endpoint-method {
+            background: #00ff88;
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 15px;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .endpoint-path {
+            color: #fff;
+            font-family: 'Monaco', monospace;
+            flex: 1;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            color: rgba(255, 255, 255, 0.7);
+            animation: fadeInUp 1s ease-out 0.9s both;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .floating-icons {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-icon {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.1);
+            font-size: 2rem;
+            animation: floatIcon 10s infinite linear;
+        }
+
+        @keyframes floatIcon {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <div class="floating-icons" id="floating-icons"></div>
+
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i>
+            </div>
+            <h1>Healthcare AI Assistant</h1>
+            <p class="subtitle">Advanced MCP Server for HIPAA-Compliant Healthcare Solutions</p>
+            
+            <!-- Navigation buttons -->
+            <div style="margin-top: 30px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <a href="/dashboard" class="btn" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                    <i class="fas fa-tachometer-alt"></i> Live Dashboard
+                </a>
+                <a href="/docs" class="btn" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+                    <i class="fas fa-book"></i> API Documentation
+                </a>
+                <a href="/healthz" class="btn" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+                    <i class="fas fa-heart"></i> Health Check
+                </a>
+            </div>
+        </header>
+
+        <div class="status-card">
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span class="status-text">Server Running - Ready for MCP Connections</span>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="card" style="animation-delay: 0.1s;">
+                <i class="fas fa-user-md card-icon"></i>
+                <h3 class="card-title">Patient Data Management</h3>
+                <p class="card-description">Securely retrieve and manage comprehensive patient data with FHIR compliance and PHI encryption.</p>
+                <a href="/docs#/Patient/get_patient_data_patient__patient_id__get" class="btn">View API</a>
+                <a href="/dashboard" class="btn" style="background: linear-gradient(135deg, #667eea, #764ba2); margin-left: 10px;">Dashboard</a>
+            </div>
+
+            <div class="card" style="animation-delay: 0.2s;">
+                <i class="fas fa-calendar-check card-icon"></i>
+                <h3 class="card-title">Appointment Scheduling</h3>
+                <p class="card-description">Smart appointment scheduling with provider availability checking and conflict resolution.</p>
+                <a href="/docs#/Appointment/schedule_appointment_appointment_schedule_post" class="btn">View API</a>
+                <a href="/dashboard" class="btn" style="background: linear-gradient(135deg, #667eea, #764ba2); margin-left: 10px;">Dashboard</a>
+            </div>
+
+            <div class="card" style="animation-delay: 0.3s;">
+                <i class="fas fa-pills card-icon"></i>
+                <h3 class="card-title">Drug Interaction Checker</h3>
+                <p class="card-description">Advanced medication analysis using RxNorm and FDA databases for safety validation.</p>
+                <a href="/docs#/Medications/check_drug_interactions_medications_interactions_post" class="btn">View API</a>
+            </div>
+
+            <div class="card" style="animation-delay: 0.4s;">
+                <i class="fas fa-shield-alt card-icon"></i>
+                <h3 class="card-title">Insurance Verification</h3>
+                <p class="card-description">Real-time insurance eligibility verification with comprehensive coverage details.</p>
+                <a href="/docs#/Insurance/verify_insurance_eligibility_insurance_verify_post" class="btn">View API</a>
+            </div>
+
+            <div class="card" style="animation-delay: 0.5s;">
+                <i class="fas fa-share-alt card-icon"></i>
+                <h3 class="card-title">Specialist Referrals</h3>
+                <p class="card-description">Streamlined referral management with provider-to-provider communication tracking.</p>
+                <a href="/docs#/Referral/create_referral_referral_create_post" class="btn">View API</a>
+            </div>
+
+            <div class="card" style="animation-delay: 0.6s;">
+                <i class="fas fa-code card-icon"></i>
+                <h3 class="card-title">MCP Integration</h3>
+                <p class="card-description">Model Context Protocol integration for seamless AI assistant connectivity.</p>
+                <a href="/docs" class="btn">API Docs</a>
+            </div>
+        </div>
+
+        <div class="endpoints">
+            <h2><i class="fas fa-network-wired"></i> Available Endpoints</h2>
+            <div class="endpoint-list">
+                <div class="endpoint">
+                    <span class="endpoint-method">GET</span>
+                    <span class="endpoint-path">/patient/{patient_id}</span>
+                </div>
+                <div class="endpoint">
+                    <span class="endpoint-method">POST</span>
+                    <span class="endpoint-path">/appointment/schedule</span>
+                </div>
+                <div class="endpoint">
+                    <span class="endpoint-method">POST</span>
+                    <span class="endpoint-path">/medications/interactions</span>
+                </div>
+                <div class="endpoint">
+                    <span class="endpoint-method">POST</span>
+                    <span class="endpoint-path">/insurance/verify</span>
+                </div>
+                <div class="endpoint">
+                    <span class="endpoint-method">POST</span>
+                    <span class="endpoint-path">/referral/create</span>
+                </div>
+                <div class="endpoint">
+                    <span class="endpoint-method">GET</span>
+                    <span class="endpoint-path">/docs</span>
+                </div>
+                <div class="endpoint">
+                    <span class="endpoint-method">GET</span>
+                    <span class="endpoint-path">/healthz</span>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>🏥 Healthcare AI Assistant MCP Server v1.0.0 | HIPAA Compliant | Secure & Encrypted</p>
+            <p>Powered by FastAPI, MCP Protocol, and Advanced AI Technologies</p>
+        </footer>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            const size = Math.random() * 6 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            particle.style.animationDelay = Math.random() * 2 + 's';
+            
+            document.getElementById('particles').appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 6000);
+        }
+
+        // Create floating healthcare icons
+        function createFloatingIcon() {
+            const icons = ['fa-heartbeat', 'fa-user-md', 'fa-pills', 'fa-stethoscope', 'fa-hospital', 'fa-ambulance', 'fa-plus-circle'];
+            const icon = document.createElement('i');
+            icon.className = `fas ${icons[Math.floor(Math.random() * icons.length)]} floating-icon`;
+            
+            icon.style.left = Math.random() * 100 + '%';
+            icon.style.animationDuration = (Math.random() * 5 + 8) + 's';
+            icon.style.animationDelay = Math.random() * 3 + 's';
+            
+            document.getElementById('floating-icons').appendChild(icon);
+            
+            setTimeout(() => {
+                icon.remove();
+            }, 13000);
+        }
+
+        // Generate particles and icons
+        setInterval(createParticle, 300);
+        setInterval(createFloatingIcon, 2000);
+
+        // Add some initial particles
+        for (let i = 0; i < 20; i++) {
+            setTimeout(createParticle, i * 100);
+        }
+
+        // Add some initial floating icons
+        for (let i = 0; i < 5; i++) {
+            setTimeout(createFloatingIcon, i * 400);
+        }
+
+        // Add smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add card hover effects
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

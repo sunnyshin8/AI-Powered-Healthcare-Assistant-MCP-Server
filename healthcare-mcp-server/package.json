@@ -1,0 +1,19 @@
+{
+  "name": "healthcare-mcp-server",
+  "version": "1.0.0",
+  "description": "A HIPAA-compliant Model Context Protocol (MCP) server for secure healthcare AI workflows. Powered by Cequence AI Gateway for enterprise-ready agent authentication, with Epic/Cerner FHIR, RxNorm, X12 EDI integrations.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.5"
+  }
+}

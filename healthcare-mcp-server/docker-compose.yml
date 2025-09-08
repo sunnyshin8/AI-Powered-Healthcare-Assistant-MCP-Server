@@ -1,0 +1,28 @@
+version: '3.9'
+services:
+	db:
+		image: postgres:15-alpine
+		environment:
+			POSTGRES_DB: healthcare_db
+			POSTGRES_USER: user
+			POSTGRES_PASSWORD: password
+		ports:
+			- "5432:5432"
+		volumes:
+			- pgdata:/var/lib/postgresql/data
+	app:
+		build: .
+		command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+		environment:
+			- NEON_DATABASE_URL=postgresql://user:password@db:5432/healthcare_db
+			- JWT_SECRET=your_jwt_secret_key
+			- ENCRYPTION_KEY=your_phi_encryption_key
+			- DESCOPE_PROJECT_ID=your_descope_project
+			- EPIC_CLIENT_ID=your_epic_client_id
+			- CERNER_CLIENT_ID=your_cerner_client_id
+		ports:
+			- "8000:8000"
+		depends_on:
+			- db
+volumes:
+	pgdata:
