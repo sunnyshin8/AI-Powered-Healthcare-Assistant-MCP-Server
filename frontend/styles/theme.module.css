@@ -1,6 +1,6 @@
 .gradientBg {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
   animation: gradientMove 10s infinite alternate;
 }
 @keyframes gradientMove {
@@ -16,12 +16,12 @@
 }
 .title {
   font-size: 3rem;
-  color: #fff;
+  color: #e2e8f0;
   font-weight: 700;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
 .subtitle {
-  color: #fff;
+  color: #cbd5e1;
   font-size: 1.2rem;
   margin-bottom: 2rem;
 }
@@ -33,15 +33,16 @@
   padding: 1rem 2rem;
   border-radius: 30px;
   margin: 0 1rem;
-  background: linear-gradient(135deg, #00ff88, #00cc70);
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
   color: #fff;
   font-weight: 500;
   text-decoration: none;
   transition: box-shadow 0.3s;
 }
 .btnAlt {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, #1e293b, #334155);
+  border: 1px solid rgba(100, 116, 139, 0.3);
 }
 .btn:hover, .btnAlt:hover {
-  box-shadow: 0 10px 20px rgba(0,255,136,0.3);
+  box-shadow: 0 10px 20px rgba(79, 70, 229, 0.4);
 }

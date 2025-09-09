@@ -16,7 +16,16 @@ async def get_patient_data(patient_id: str, fhir_server_url: str, access_token: 
     # Query Patient, Condition, MedicationRequest, AllergyIntolerance resources
     # Apply PHI encryption and audit logging
     # Return structured PatientData model
-    pass
+    import json
+    import os
+
+    sample_path = os.path.join(os.path.dirname(__file__), '../sample_patients.json')
+    with open(sample_path, 'r', encoding='utf-8') as f:
+        patients = json.load(f)
+    for p in patients:
+        if p['patient_id'] == patient_id:
+            return p
+    return {}
 
 @mcp.tool()
 async def schedule_appointment(appointment_data: AppointmentRequest, fhir_server_url: str, access_token: str) -> Dict:
@@ -25,7 +34,16 @@ async def schedule_appointment(appointment_data: AppointmentRequest, fhir_server
     # Create FHIR Appointment resource with proper participants
     # Handle appointment conflicts and rescheduling
     # Return confirmation with appointment ID
-    pass
+    sample_path = os.path.join(os.path.dirname(__file__), '../sample_patients.json')
+    with open(sample_path, 'r', encoding='utf-8') as f:
+        patients = json.load(f)
+    for p in patients:
+        if p['patient_id'] == appointment_data.get('patient_id'):
+            new_appt = appointment_data.copy()
+            new_appt['appointment_id'] = f"A{len(p['appointments'])+1:05d}"
+            p['appointments'].append(new_appt)
+            return {"status": "Scheduled", "appointment_id": new_appt['appointment_id']}
+    return {"status": "Patient not found"}
 
 @mcp.tool()
 async def check_drug_interactions(medications: List[str]) -> MedicationInteraction:
@@ -43,7 +61,13 @@ async def verify_insurance_eligibility(patient_id: str, insurance_info: Dict) ->
     # Query insurance payer systems for real-time eligibility
     # Parse coverage details, copays, deductibles
     # Return structured eligibility response
-    pass
+    sample_path = os.path.join(os.path.dirname(__file__), '../sample_patients.json')
+    with open(sample_path, 'r', encoding='utf-8') as f:
+        patients = json.load(f)
+    for p in patients:
+        if p['patient_id'] == patient_id:
+            return p.get('insurance', {})
+    return {"status": "Patient not found"}
 
 @mcp.tool()
 async def create_referral(patient_id: str, referring_provider: str, specialist_provider: str, reason: str) -> ReferralRequest:
@@ -52,4 +76,20 @@ async def create_referral(patient_id: str, referring_provider: str, specialist_p
     # Handle provider-to-provider communication
     # Track referral status and follow-up requirements
     # Return referral confirmation with tracking information
-    pass
+    sample_path = os.path.join(os.path.dirname(__file__), '../sample_patients.json')
+    with open(sample_path, 'r', encoding='utf-8') as f:
+        patients = json.load(f)
+    for p in patients:
+        if p['patient_id'] == patient_id:
+            referral = {
+                "referring_provider": referring_provider,
+                "specialist_provider": specialist_provider,
+                "reason": reason,
+                "referral_id": f"R{len(p.get('care_coordination', []))+1:05d}"
+            }
+            if 'care_coordination' in p:
+                p['care_coordination'].append(referral)
+            else:
+                p['care_coordination'] = [referral]
+            return {"status": "Referral created", "referral_id": referral['referral_id']}
+    return {"status": "Patient not found"}
