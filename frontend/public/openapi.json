@@ -1,0 +1,74 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Healthcare AI Assistant MCP API",
+    "version": "1.0.0",
+    "description": "Secure, HIPAA-compliant healthcare API for Cequence AI Gateway and MCP agents."
+  },
+  "servers": [
+    {"url": "https://localhost:8000", "description": "Development server"},
+    {"url": "https://healthcare-mcp.fly.dev", "description": "Production server"}
+  ],
+  "paths": {
+    "/api/v1/patient-data": {
+      "post": {
+        "summary": "Retrieve FHIR patient data",
+        "description": "Retrieve patient medical records and demographics from Epic/Cerner FHIR servers.",
+        "operationId": "getPatientData",
+        "tags": ["Patient Data"],
+        "security": [{"oauth2": ["patient.read"]}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {"$ref": "#/components/schemas/PatientDataRequest"}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Patient data response",
+            "content": {
+              "application/json": {
+                "schema": {"$ref": "#/components/schemas/PatientData"}
+              }
+            }
+          },
+          "401": {"description": "Unauthorized – invalid token"},
+          "403": {"description": "Forbidden – insufficient scope"},
+          "404": {"description": "Patient not found"}
+        }
+      }
+    },
+    "/api/v1/appointment": {
+      "post": {
+        "summary": "Schedule appointment",
+        "description": "Schedule an appointment with a healthcare provider via the EHR system.",
+        "operationId": "scheduleAppointment",
+        "tags": ["Appointments"],
+        "security": [{"oauth2": ["appointment.write"]}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {"$ref": "#/components/schemas/AppointmentRequest"}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Appointment scheduled",
+            "content": {
+              "application/json": {
+                "schema": {"$ref": "#/components/schemas/Appointment"}
+              }
+            }
+          },
+          "401": {"description": "Unauthorized – invalid token"},
+          "403": {"description": "Forbidden – insufficient scope"},
+          "404": {"description": "Provider not found"}
+        }
+      }
+    }
+  }
+}

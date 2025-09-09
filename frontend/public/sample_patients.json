@@ -1,0 +1,92 @@
+[
+	{
+		"patient_id": "P00001",
+		"name": "Joyce Wright",
+		"dob": "1938-09-30",
+		"gender": "Other",
+		"address": "12985 Curry Inlet Apt. 057, South Nicholas, MH 78200",
+		"phone": "001-470-810-7865x57269",
+		"email": "morganandrea@example.org",
+		"medical_records": [
+			{
+				"record_id": "MR00001",
+				"diagnosis": "hospital",
+				"medications": ["Omeprazole", "Metformin"],
+				"allergies": ["Latex", "None"],
+				"last_visit": "2025-04-07"
+			}
+		],
+		"appointments": [
+			{
+				"appointment_id": "A00001",
+				"date": "2025-09-11",
+				"provider": "Dr. Kim",
+				"reason": "Federal power health.",
+				"status": "Completed"
+			}
+		],
+		"insurance": {
+			"provider": "Humana",
+			"policy_number": "cQ1392141",
+			"valid_through": "2027-07-06",
+			"verified": false
+		},
+		"care_coordination": [
+			{
+				"provider": "Dr. Patel",
+				"role": "Orthopedist",
+				"contact": "foxnathan@example.com"
+			},
+			{
+				"provider": "Dr. Smith",
+				"role": "Orthopedist",
+				"contact": "shaun91@example.org"
+			}
+		]
+	},
+	{
+		"patient_id": "P00002",
+		"name": "Russell Moore",
+		"dob": "1998-03-31",
+		"gender": "Other",
+		"address": "6923 Pierce Pass, Shawburgh, OH 45310",
+		"phone": "(825)565-9679x6856",
+		"email": "bellkirsten@example.org",
+		"medical_records": [
+			{
+				"record_id": "MR00002",
+				"diagnosis": "help",
+				"medications": ["Omeprazole"],
+				"allergies": ["None", "Peanuts"],
+				"last_visit": "2025-08-24"
+			}
+		],
+		"appointments": [
+			{
+				"appointment_id": "A00002",
+				"date": "2025-10-04",
+				"provider": "Dr. Kim",
+				"reason": "Right we.",
+				"status": "Completed"
+			}
+		],
+		"insurance": {
+			"provider": "Humana",
+			"policy_number": "CT2125134",
+			"valid_through": "2026-02-12",
+			"verified": true
+		},
+		"care_coordination": [
+			{
+				"provider": "Dr. Smith",
+				"role": "Dermatologist",
+				"contact": "stacy75@example.org"
+			},
+			{
+				"provider": "Dr. Kim",
+				"role": "Primary Care",
+				"contact": "abell@example.org"
+			}
+		]
+	}
+]

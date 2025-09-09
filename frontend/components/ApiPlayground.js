@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
 const endpoints = [
-  { label: 'Health Check', path: '/healthz', method: 'GET' },
-  { label: 'Patient Data', path: '/patient/12345', method: 'GET' },
-  { label: 'OpenAPI Spec', path: '/openapi.json', method: 'GET' },
+  { label: 'Health Check', path: '/sample_patients.json', method: 'GET', type: 'health' },
+  { label: 'Patient Data', path: '/sample_patients.json', method: 'GET', type: 'patient' },
+  { label: 'OpenAPI Spec', path: '/openapi.json', method: 'GET', type: 'spec' },
 ];
 
 export default function ApiPlayground() {
@@ -14,8 +14,14 @@ export default function ApiPlayground() {
     setLoading(true);
     try {
       const res = await fetch(endpoint.path, { method: endpoint.method });
-      const data = await res.text();
-      setResponse(`Status: ${res.status} ${res.statusText}\nResponse:\n${data}`);
+      let data;
+      if (endpoint.type === 'patient' || endpoint.type === 'health' || endpoint.type === 'spec') {
+        data = await res.json();
+        setResponse(`Status: ${res.status} ${res.statusText}\nResponse:\n${JSON.stringify(data, null, 2)}`);
+      } else {
+        data = await res.text();
+        setResponse(`Status: ${res.status} ${res.statusText}\nResponse:\n${data}`);
+      }
     } catch (error) {
       setResponse(`Error: ${error.message}`);
     }
